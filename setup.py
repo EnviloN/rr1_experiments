@@ -23,8 +23,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "experiment_server_node = rr1_experiments.experiment_server:main",
-            "experiment_client_node = rr1_experiments.experiment_client:main",
+            "experiment_publisher_node = rr1_experiments.experiment_publisher:main",
+            "experiment_subscriber_node = rr1_experiments.experiment_subscriber:main",
         ],
     },
 )

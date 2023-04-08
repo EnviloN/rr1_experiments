@@ -1,25 +1,47 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 
-UNITY = True
+UNITY = False
+# PAYLOAD_SIZE = 2
+# TIMER_DELTA = 200
+MSG_CNT = 1000
+LOGFILE = "log/log.csv"
 
 def generate_launch_description():
-    server_node = Node(
-            package='rr1_experiments',
-            executable='experiment_server_node',
-            name='experiment_server'
+    payload_size_value = LaunchConfiguration('payload_size')
+    time_delta_value = LaunchConfiguration('time_delta')
+
+    payload_size_launch_arg = DeclareLaunchArgument(
+            'payload_size',
+            default_value='2'
+        )
+    time_delta_launch_arg = DeclareLaunchArgument(
+            'time_delta',
+            default_value='200'
         )
 
-    client_node = Node(
+    subscriber_node = Node(
             package='rr1_experiments',
-            executable='experiment_client_node',
-            name='experiment_client',
+            executable='experiment_subscriber_node',
+            name='experiment_subscriber',
             parameters=[
-                {'timer_delta_ms': 500},
-                {'message_count': 10},
-                {'max_payload': 1048576},
+                {'payload_size': payload_size_value},
                 {'unity': UNITY},
-                {'logfile': 'log/log.csv'},
+                {'message_count': MSG_CNT},
+                {'logfile': LOGFILE}
+            ]
+        )
+    
+    publisher_node = Node(
+            package='rr1_experiments',
+            executable='experiment_publisher_node',
+            name='experiment_publisher',
+            parameters=[
+                {'timer_delta_ms': time_delta_value},
+                {'message_count': MSG_CNT},
+                {'payload_size': payload_size_value}
             ]
         )
     
@@ -30,10 +52,10 @@ def generate_launch_description():
         parameters=[{"ROS_IP": "0.0.0.0"}, {"ROS_TCP_PORT": 10000}],
     )
 
-    nodes = [client_node]
+    nodes = [payload_size_launch_arg, time_delta_launch_arg, publisher_node]
     if UNITY:
         nodes.append(ros_tcp_endpoint)
     else:
-        nodes.append(server_node)
+        nodes.append(subscriber_node)
 
     return LaunchDescription(nodes)
