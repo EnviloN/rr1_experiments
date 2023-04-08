@@ -7,7 +7,7 @@
       <visual name='visual'>
         <geometry>
           <mesh>
-            <uri>/home/envilon/dev_ws/src/rr1_bringup/worlds/models/meshes/boat.dae</uri>
+            <uri>model://Boat/mesh/boat.dae</uri>
             <scale>0.1 0.1 0.1</scale>
           </mesh>
         </geometry>
