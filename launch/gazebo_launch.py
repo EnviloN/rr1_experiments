@@ -29,21 +29,15 @@ def generate_launch_description():
         default_value=["/home/envilon/dev_ws/src/rr1_experiments/worlds/experiment", ''],
         description='SDF world file'
     )
+    
     paused = DeclareLaunchArgument(
         'pause',
         default_value=["true"],
         description='Pause simulation'
     )
 
-    lockstep = DeclareLaunchArgument(
-        'lockstep',
-        default_value=["true"],
-        description='lockstep simulation'
-    )
-
     return LaunchDescription([            
             launch_argument,
             paused,
-            lockstep,
             launch_gazebo
         ])
