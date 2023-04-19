@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-import argparse, subprocess, math
+import argparse, os, math
+from ament_index_python.packages import get_package_share_directory
 
-PATH = "/home/envilon/dev_ws/src/rr1_experiments/worlds/experiment"
+EXPERIMENTS_PKG = "rr1_experiments"
+
+WORLD_PATH = os.path.join(get_package_share_directory(EXPERIMENTS_PKG), 'worlds', 'experiment')
+MESH = os.path.join(get_package_share_directory(EXPERIMENTS_PKG), 'mesh', 'boat.dae')
+COLLIDER = os.path.join(get_package_share_directory(EXPERIMENTS_PKG), 'mesh', 'boat_collider.stl')
 
 start = """
 <sdf version='1.7'>
@@ -105,7 +110,7 @@ static_model = """
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://Boat/mesh/boat.dae</uri>
+              <uri>{}</uri>
               <scale>0.1 0.1 0.1</scale>
             </mesh>
           </geometry>
@@ -141,7 +146,7 @@ dynamic_model = """
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/envilon/dev_ws/src/rr1_experiments/models/meshes/boat.dae</uri>
+              <uri>{}</uri>
               <scale>0.1 0.1 0.1</scale>
             </mesh>
           </geometry>
@@ -152,7 +157,7 @@ dynamic_model = """
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/envilon/dev_ws/src/rr1_experiments/models/meshes/boat_collider.stl</uri>
+              <uri>{}</uri>
               <scale>0.1 0.1 0.1</scale>
             </mesh>
           </geometry>
@@ -262,14 +267,14 @@ z_spacing = 1
 
 def generate_world(args):
     positions = generate_spawns(args.cnt, args.dynamic)
-    with open(PATH, 'w') as f:
+    with open(WORLD_PATH, 'w') as f:
         f.write(start)
         for i in range(1, args.cnt + 1):
             name = "Boat_{}".format(i)
             if args.dynamic:
-                f.write(dynamic_model.format(name))
+                f.write(dynamic_model.format(name, MESH, COLLIDER))
             else:
-                f.write(static_model.format(name))
+                f.write(static_model.format(name, MESH))
         f.write(middle)
         for name, pos in positions:
             f.write(model_state.format(name, pos, pos))

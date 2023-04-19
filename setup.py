@@ -12,11 +12,14 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name), glob('launch/*launch.py'))
+        (os.path.join('share', package_name, 'launch'), glob('launch/*launch.py')),
+        (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
+        (os.path.join('share', package_name, 'mesh'), glob('models/meshes/*')),
+        (os.path.join('share', package_name, 'scripts'), glob('scripts/*'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='envilon',
+    maintainer='chudyja1',
     maintainer_email='chudyja1@fit.cvut.cz',
     description='ROS2 package for experiments performed during the development of RR1 robotic arm simulation in Unity.',
     license='TODO: License declaration',

@@ -11,7 +11,7 @@ for i in range(1, 22):
         time_delta = 500
     elif i >= 17:
         time_delta = 100
-    cmd = ["ros2", "launch", "rr1_experiments", "tcp_endpoint_experiment_launch.py",
+    cmd = ["ros2", "launch", "rr1_experiments", "tcp_endpoint_experiment.launch.py",
            "payload_size:={}".format(i), "time_delta:={}".format(time_delta)]
     
     print("Running experiment with payload size {} and time delta {}".format(2**i, time_delta))
